@@ -2,7 +2,9 @@ package com.example.autoclicker;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.accessibilityservice.AccessibilityServiceInfo;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,18 +13,29 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewParent;
+import android.view.WindowManager;
+import android.view.accessibility.AccessibilityEvent;
+import android.view.accessibility.AccessibilityManager;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.autoclicker.service.ForegroundService;
 import com.example.autoclicker.service.MyService;
 import com.example.autoclicker.service.Window;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity implements View.OnTouchListener{
-    private final String TAG = MyService.class.getSimpleName();
+    private static final String TAG = "MainActivity";
     private Button start;
     private Button close;
     private TextView mainText;
+    private Button access_perm;
+    private Window window;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -32,20 +45,28 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         start = findViewById(R.id.start);
         close = findViewById(R.id.close);
         mainText = findViewById(R.id.text);
-        Log.d(TAG, "Method: onCreate");
+        access_perm = findViewById(R.id.acces_perm);
+        Log.d(TAG, "onCreate: ");
 
-        Window window = new Window(this);
+        window = new Window(this);
 
         checkOverlayPermission();
 
+        access_perm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
+                isAccessibilityEnabled(MainActivity.this, "aaa");
 
+            }
+        });
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startService();
                 window.open();
-                MyService mm = new MyService();
-                mm.doAction();
+//                MyService mm = new MyService();
+//                mm.doAction();
             }
         });
         close.setOnClickListener(new View.OnClickListener() {
@@ -78,6 +99,20 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     }
 
+    private boolean isAccessibilityEnabled(Context context, String id) {
+        AccessibilityManager am = (AccessibilityManager) context.getSystemService(Context.ACCESSIBILITY_SERVICE);
+        List<AccessibilityServiceInfo> runningServices = am.getEnabledAccessibilityServiceList(AccessibilityEvent.TYPES_ALL_MASK);
+        Log.i("AAA", runningServices.toString() + "<\t>");
+        for (AccessibilityServiceInfo service : runningServices) {
+            Log.i("AAA", service.toString() + "<\t>");
+
+//            if(id.equals(service.getId())) {
+//                return true;
+//            }
+        }
+        return false;
+    }
+
     private void startService() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (Settings.canDrawOverlays(this)) {
@@ -100,16 +135,44 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
     @Override
     protected void onResume() {
+        Log.i(TAG, "onResume: ");
         super.onResume();
-//        startService();
+        startService();
     }
 
-    private int _xDelta;
-    private int _yDelta;
+    @Override
+    protected void onStart() {
+        Log.i(TAG, "onStart: ");
+        super.onStart();
+    }
+
+    @Override
+    protected void onPause() {
+        Log.i(TAG, "onPause: ");
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        Log.i(TAG, "onStop: ");
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        window.close();
+        Log.i(TAG, "onDestroy: ");
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onRestart() {
+        Log.i(TAG, "onRestart: ");
+        super.onRestart();
+    }
 
     private float downX;
     private float downY;
-
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouch(View v, MotionEvent mv) {

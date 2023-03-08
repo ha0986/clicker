@@ -22,7 +22,10 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.view.WindowManager;
+import android.view.accessibility.AccessibilityEvent;
+import android.view.accessibility.AccessibilityManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -35,18 +38,18 @@ import com.example.autoclicker.MainActivity;
 import com.example.autoclicker.R;
 
 public class Window extends AppCompatActivity {
-    private final String TAG = MyService.class.getSimpleName();
+    private static final String TAG = "Window";
     private Context context;
     private WindowManager.LayoutParams mParams;
     private LayoutInflater layoutInflater;
     private View mView;
     private int[] coords = new int[2];
+    private Button enableClicking;
     WindowManager mWindowManager;
     private WindowManager.LayoutParams params;
 
     public Window(Context context) {
         this.context = context;
-
 //        final DisplayMetrics metric = new DisplayMetrics();
 //        ((WindowManager)context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getMetrics(metric);
 
@@ -66,10 +69,29 @@ public class Window extends AppCompatActivity {
         mParams.gravity = Gravity.CENTER;
         mWindowManager = (WindowManager) context.getSystemService(WINDOW_SERVICE);
 
-        Button enableClicking = mView.findViewById(R.id.enable_clicking);
+        enableClicking = mView.findViewById(R.id.enable_clicking);
         enableClicking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+//                AccessibilityManager manager = (AccessibilityManager)context.getSystemService(Context.ACCESSIBILITY_SERVICE);
+//                if(manager.isEnabled()) {
+//                    AccessibilityEvent event = AccessibilityEvent.obtain();
+//                    event.setEventType(AccessibilityEvent.TYPE_VIEW_CLICKED);
+//                    event.setClassName("MyService");
+//                    event.getText().add("aoao");
+//
+//                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+//                        event.setSource(view);
+//                    }
+//                    manager.sendAccessibilityEvent(event);
+//                }
+//                AccessibilityEvent event = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_VIEW_CLICKED);
+//
+//                ViewParent parent = view.getParent();
+//                if (parent != null) {
+//                    parent.requestSendAccessibilityEvent(view, event);
+//                }
+
 //                long downTime = SystemClock.uptimeMillis();
 //                long eventTime = SystemClock.uptimeMillis() + 100;
 //                float x = 0.0f;
@@ -91,6 +113,8 @@ public class Window extends AppCompatActivity {
 
             }
         });
+
+
 
         mView.setOnTouchListener(new View.OnTouchListener() {
             final WindowManager.LayoutParams mParamsUpdated = mParams;
@@ -143,7 +167,7 @@ public class Window extends AppCompatActivity {
                 mWindowManager.removeView(mView);
 //            ((WindowManager) context.getSystemService(WINDOW_SERVICE)).removeView(mView);
                 mView.invalidate();
-                Log.i("AOBA", "Window: " + new Intent(context, ForegroundService.class).toString());
+                Log.i(TAG, "Window: " + new Intent(context, ForegroundService.class).toString());
 //            stopService(new Intent(context, ForegroundService.class));
                 context.stopService(new Intent(context, ForegroundService.class));
 //            ((ViewGroup)mView.getParent()).removeAllViews();

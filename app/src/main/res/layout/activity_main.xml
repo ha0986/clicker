@@ -31,5 +31,14 @@
             android:layout_centerHorizontal="true"
             />
 
+    <Button
+            android:layout_marginTop="10dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/close"
+            android:text="Accessibility Permisson"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/acces_perm" />
+
 
 </RelativeLayout>
