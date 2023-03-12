@@ -52,29 +52,18 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
         checkOverlayPermission();
 
-        access_perm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
-                isAccessibilityEnabled(MainActivity.this, "aaa");
+        access_perm.setOnClickListener(view -> {
+            startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
+            isAccessibilityEnabled(MainActivity.this, "aaa");
 
-            }
         });
-        start.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startService();
-                window.open();
+        start.setOnClickListener(view -> {
+            startService();
+            window.open();
 //                MyService mm = new MyService();
 //                mm.doAction();
-            }
         });
-        close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                window.close();
-            }
-        });
+        close.setOnClickListener(view -> window.close());
         mainText.setOnTouchListener(this);
 
 

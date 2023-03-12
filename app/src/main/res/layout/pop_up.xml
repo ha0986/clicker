@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
 
-        >
+    >
 
     <ImageView
-            android:id="@+id/drawable_circle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/clicking_circle"
-            android:contentDescription="@string/clicking_circle_desc" />
+        android:id="@+id/drawable_circle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/clicking_circle_desc"
+        android:src="@drawable/clicking_circle" />
+
     <Button
-            android:id="@+id/enable_clicking"
-            android:layout_below="@id/drawable_circle"
-            android:layout_width="65dp"
-            android:layout_height="wrap_content"/>
+        android:id="@+id/enable_clicking"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/drawable_circle"
+        android:text="Click"
+        app:cornerRadius="30dp" />
 
 </RelativeLayout>

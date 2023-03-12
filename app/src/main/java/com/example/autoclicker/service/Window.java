@@ -70,48 +70,45 @@ public class Window extends AppCompatActivity {
         mWindowManager = (WindowManager) context.getSystemService(WINDOW_SERVICE);
 
         enableClicking = mView.findViewById(R.id.enable_clicking);
-        enableClicking.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                AccessibilityManager manager = (AccessibilityManager)context.getSystemService(Context.ACCESSIBILITY_SERVICE);
-//                if(manager.isEnabled()) {
-//                    AccessibilityEvent event = AccessibilityEvent.obtain();
-//                    event.setEventType(AccessibilityEvent.TYPE_VIEW_CLICKED);
-//                    event.setClassName("MyService");
-//                    event.getText().add("aoao");
-//
-//                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-//                        event.setSource(view);
-//                    }
-//                    manager.sendAccessibilityEvent(event);
-//                }
-//                AccessibilityEvent event = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_VIEW_CLICKED);
-//
-//                ViewParent parent = view.getParent();
-//                if (parent != null) {
-//                    parent.requestSendAccessibilityEvent(view, event);
-//                }
+        enableClicking.setOnClickListener(view -> {
+            AccessibilityManager manager = (AccessibilityManager)context.getSystemService(Context.ACCESSIBILITY_SERVICE);
+            if(manager.isEnabled()) {
+                AccessibilityEvent event = AccessibilityEvent.obtain();
+                event.setEventType(AccessibilityEvent.TYPE_VIEW_CLICKED);
+                event.setClassName("MyService");
+                event.getText().add("aoao");
 
-//                long downTime = SystemClock.uptimeMillis();
-//                long eventTime = SystemClock.uptimeMillis() + 100;
-//                float x = 0.0f;
-//                float y = 0.0f;
-//// List of meta states found here: developer.android.com/reference/android/view/KeyEvent.html#getMetaState()
-//                int metaState = 0;
-//                @SuppressLint("Recycle") MotionEvent motionEvent = MotionEvent.obtain(
-//                        downTime,
-//                        eventTime,
-//                        MotionEvent.ACTION_UP,
-//                        coords[0],
-//                        coords[1],
-//                        metaState
-//                );
-//
-//                mView.dispatchTouchEvent(motionEvent);
-
-
-
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                    event.setSource(view);
+                }
+                manager.sendAccessibilityEvent(event);
             }
+            AccessibilityEvent event = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_VIEW_CLICKED);
+
+            ViewParent parent = view.getParent();
+            if (parent != null) {
+                parent.requestSendAccessibilityEvent(view, event);
+            }
+
+            long downTime = SystemClock.uptimeMillis();
+            long eventTime = SystemClock.uptimeMillis() + 100;
+            float x = 0.0f;
+            float y = 0.0f;
+// List of meta states found here: developer.android.com/reference/android/view/KeyEvent.html#getMetaState()
+            int metaState = 0;
+            @SuppressLint("Recycle") MotionEvent motionEvent = MotionEvent.obtain(
+                    downTime,
+                    eventTime,
+                    MotionEvent.ACTION_UP,
+                    coords[0],
+                    coords[1],
+                    metaState
+            );
+
+            mView.dispatchTouchEvent(motionEvent);
+
+
+
         });
 
 
