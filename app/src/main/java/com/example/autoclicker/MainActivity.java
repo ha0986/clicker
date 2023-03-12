@@ -53,16 +53,20 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         checkOverlayPermission();
 
         access_perm.setOnClickListener(view -> {
-            startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
-            isAccessibilityEnabled(MainActivity.this, "aaa");
 
         });
         start.setOnClickListener(view -> {
-            startService();
-            window.open();
-//                MyService mm = new MyService();
-//                mm.doAction();
+
+            if (!checkAccessibilityPermission()){
+                startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
+            }else{
+                startService();
+                window.open();
+                MyService mm = new MyService();
+                mm.doAction();
+            }
         });
+
         close.setOnClickListener(view -> window.close());
         mainText.setOnTouchListener(this);
 
@@ -88,18 +92,23 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     }
 
-    private boolean isAccessibilityEnabled(Context context, String id) {
-        AccessibilityManager am = (AccessibilityManager) context.getSystemService(Context.ACCESSIBILITY_SERVICE);
-        List<AccessibilityServiceInfo> runningServices = am.getEnabledAccessibilityServiceList(AccessibilityEvent.TYPES_ALL_MASK);
-        Log.i("AAA", runningServices.toString() + "<\t>");
-        for (AccessibilityServiceInfo service : runningServices) {
-            Log.i("AAA", service.toString() + "<\t>");
-
-//            if(id.equals(service.getId())) {
-//                return true;
-//            }
+    public boolean checkAccessibilityPermission () {
+        int accessEnabled = 0;
+        try {
+            accessEnabled = Settings.Secure.getInt(this.getContentResolver(), Settings.Secure.ACCESSIBILITY_ENABLED);
+        } catch (Settings.SettingNotFoundException e) {
+            e.printStackTrace();
         }
-        return false;
+        if (accessEnabled == 0) {
+            // if not construct intent to request permission
+            Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            // request permission via start activity for result
+            startActivity(intent);
+            return false;
+        } else {
+            return true;
+        }
     }
 
     private void startService() {

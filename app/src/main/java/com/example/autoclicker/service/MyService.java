@@ -24,20 +24,17 @@ public class MyService extends AccessibilityService {
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent accessibilityEvent) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Looper.prepare();
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-//                pressLocation(500, 500);
-                click(3, 0);
-                doRightThenDownDrag();
-                Log.i(TAG, "onAccessibilityEvent: ");
+        new Thread(() -> {
+            Looper.prepare();
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
+//                pressLocation(500, 500);
+            click(3, 0);
+            doRightThenDownDrag();
+            Log.i(TAG, "onAccessibilityEvent: ");
         }).start();
 
     }
@@ -64,13 +61,13 @@ public class MyService extends AccessibilityService {
     public void onServiceConnected() { // TODO Протестировать accessibility_service_config без задания параметров в этом методе
         super.onServiceConnected();
 
-//        AccessibilityServiceInfo info = new AccessibilityServiceInfo();
+        AccessibilityServiceInfo info = new AccessibilityServiceInfo();
 
-//        info.eventTypes = AccessibilityEvent.TYPE_VIEW_CLICKED |
-//                AccessibilityEvent.TYPE_VIEW_FOCUSED;
-//        info.feedbackType = AccessibilityServiceInfo.FEEDBACK_SPOKEN;
-//        info.notificationTimeout = 100;
-//        this.setServiceInfo(info);
+        info.eventTypes = AccessibilityEvent.TYPE_VIEW_CLICKED |
+                AccessibilityEvent.TYPE_VIEW_FOCUSED;
+        info.feedbackType = AccessibilityServiceInfo.FEEDBACK_SPOKEN;
+        info.notificationTimeout = 100;
+        this.setServiceInfo(info);
 
         Log.i(TAG, "onServiceConnected: " + this.getServiceInfo());
 
