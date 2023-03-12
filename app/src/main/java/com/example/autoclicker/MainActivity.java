@@ -52,9 +52,19 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
         checkOverlayPermission();
 
+
+
+
         access_perm.setOnClickListener(view -> {
 
         });
+
+
+
+
+
+
+
         start.setOnClickListener(view -> {
 
             if (!checkAccessibilityPermission()){
@@ -64,8 +74,12 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 window.open();
                 MyService mm = new MyService();
                 mm.doAction();
+
             }
         });
+
+
+
 
         close.setOnClickListener(view -> window.close());
         mainText.setOnTouchListener(this);
@@ -178,12 +192,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             case MotionEvent.ACTION_DOWN:
                 downX = mv.getX();
                 downY = mv.getY();
-//                Log.i(TAG, "Action Down: " + mv.getRawX() + "," + mv.getRawY());
-                Log.i(TAG, "Action Move V: " + v.getX() + "," + mv.getY());
-
             case MotionEvent.ACTION_MOVE:
-//                Log.i(TAG, "Action Move: " + mv.getRawX() + "," + mv.getRawY());
-                Log.i(TAG, "Action Move V: " + v.getX() + "," + mv.getY());
                 float dx, dy;
                 dx = mv.getX() - downX;
                 dy = mv.getY() - downY;

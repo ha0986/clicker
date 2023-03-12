@@ -70,6 +70,10 @@ public class Window extends AppCompatActivity {
         mWindowManager = (WindowManager) context.getSystemService(WINDOW_SERVICE);
 
         enableClicking = mView.findViewById(R.id.enable_clicking);
+
+
+
+
         enableClicking.setOnClickListener(view -> {
             AccessibilityManager manager = (AccessibilityManager)context.getSystemService(Context.ACCESSIBILITY_SERVICE);
             if(manager.isEnabled()) {
@@ -130,15 +134,12 @@ public class Window extends AppCompatActivity {
                         px = event.getRawX();
 
                         py = event.getRawY();
-//                        Log.i(TAG, "getRawX: " + event.getRawX() + ", getRawY: " + event.getRawY());
                         break;
                     case MotionEvent.ACTION_MOVE:
                         mView.getLocationOnScreen(coords);
-                        Log.i(TAG, "x: " +  coords[0] + ", y: " + coords[1]);
 
                         mParamsUpdated.x = (int) (x + (event.getRawX() - px));
                         mParamsUpdated.y = (int) (y + (event.getRawY() - py));
-//                        Log.i(TAG, "getRawX: " + event.getRawX() + ", getRawY: " + event.getRawY());
                         mWindowManager.updateViewLayout(v, mParamsUpdated);
                         break;
                 }

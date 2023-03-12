@@ -3,16 +3,14 @@ package com.example.autoclicker.service;
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.accessibilityservice.GestureDescription;
-import android.content.Intent;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
 import android.graphics.Path;
 import android.os.Build;
-import android.os.Looper;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
-import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.Toast;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MyService extends AccessibilityService {
     private static final String TAG = "MyService";
@@ -24,20 +22,38 @@ public class MyService extends AccessibilityService {
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent accessibilityEvent) {
-        new Thread(() -> {
-            Looper.prepare();
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+
+
+        new Timer().scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                pressLocation(500, 500);
             }
-//                pressLocation(500, 500);
-            click(3, 0);
-            doRightThenDownDrag();
-            Log.i(TAG, "onAccessibilityEvent: ");
-        }).start();
+        }, 0, 1000);//put here time 1000 milliseconds=1 second
+
+
+
+//        new Thread(() -> {
+//            Looper.prepare();
+//            try {
+//                Thread.sleep(1000);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//            pressLocation(500, 500);
+//            click(3, 0);
+//            doRightThenDownDrag();
+//            Log.i(TAG, "onAccessibilityEvent: ");
+//        }).start();
 
     }
+
+
+
+
+
+
+
 
     private void click(int x, int y) {
         Log.i(TAG, String.format("click %d %d", x, y));
@@ -49,7 +65,6 @@ public class MyService extends AccessibilityService {
                 .build();
         dispatchGesture(gestureDescription, null, null);
     }
-
 
 
     @Override
@@ -134,11 +149,11 @@ public class MyService extends AccessibilityService {
     }
 
 
-    private void pressLocation(int x, int y){
+    public void pressLocation(int x, int y) {
         GestureDescription.Builder builder = new GestureDescription.Builder();
         Path p = new Path();
         p.moveTo(x, y);
-        p.lineTo(x+10, y+10);
+        p.lineTo(x + 10, y + 10);
         builder.addStroke(new GestureDescription.StrokeDescription(p, 10L, 500L));
         GestureDescription gesture = builder.build();
         boolean isDispatched = dispatchGesture(gesture, null, null);
