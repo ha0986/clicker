@@ -1,40 +1,24 @@
 package com.example.autoclicker.service;
 
-import static android.content.Context.WINDOW_SERVICE;
-
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.PixelFormat;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.LayerDrawable;
 import android.os.Build;
 import android.os.SystemClock;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.view.WindowManager;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.content.res.AppCompatResources;
-import androidx.core.graphics.drawable.DrawableCompat;
 
-import com.example.autoclicker.MainActivity;
 import com.example.autoclicker.R;
 
 public class Window extends AppCompatActivity {
@@ -82,6 +66,7 @@ public class Window extends AppCompatActivity {
                 event.setClassName("MyService");
                 event.getText().add("aoao");
 
+
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
                     event.setSource(view);
                 }
@@ -93,6 +78,9 @@ public class Window extends AppCompatActivity {
             if (parent != null) {
                 parent.requestSendAccessibilityEvent(view, event);
             }
+
+            MyService mm = new MyService();
+            mm.createClick((int) mView.getX(), (int) mView.getY());
 
             long downTime = SystemClock.uptimeMillis();
             long eventTime = SystemClock.uptimeMillis() + 100;

@@ -5,12 +5,9 @@ import android.accessibilityservice.AccessibilityServiceInfo;
 import android.accessibilityservice.GestureDescription;
 import android.graphics.Path;
 import android.os.Build;
+import android.os.Looper;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
-import android.widget.Toast;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class MyService extends AccessibilityService {
     private static final String TAG = "MyService";
@@ -23,32 +20,22 @@ public class MyService extends AccessibilityService {
     @Override
     public void onAccessibilityEvent(AccessibilityEvent accessibilityEvent) {
 
-
-        new Timer().scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                pressLocation(500, 500);
+        new Thread(() -> {
+            Looper.prepare();
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-        }, 0, 1000);//put here time 1000 milliseconds=1 second
-
-
-
-//        new Thread(() -> {
-//            Looper.prepare();
-//            try {
-//                Thread.sleep(1000);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
 //            pressLocation(500, 500);
-//            click(3, 0);
-//            doRightThenDownDrag();
-//            Log.i(TAG, "onAccessibilityEvent: ");
-//        }).start();
+            click(3, 0);
+            doRightThenDownDrag();
+            Log.i(TAG, "onAccessibilityEvent: ");
+        }).start();
+
+
 
     }
-
-
 
 
 
@@ -98,7 +85,7 @@ public class MyService extends AccessibilityService {
         Path dragRightPath = new Path();
         dragRightPath.moveTo(200, 200);
         dragRightPath.lineTo(400, 200);
-        long dragRightDuration = 500L; // 0.5 second
+        long dragRightDuration = 50000L; // .5 second
 
         // The starting point of the second path must match
         // the ending point of the first path.
@@ -115,7 +102,7 @@ public class MyService extends AccessibilityService {
     }
 
     // (x, y) in screen coordinates
-    private static GestureDescription createClick(float x, float y) {
+    static GestureDescription createClick(float x, float y) {
         // for a single tap a duration of 1 ms is enough
         final int DURATION = 1;
 
@@ -156,9 +143,10 @@ public class MyService extends AccessibilityService {
         p.lineTo(x + 10, y + 10);
         builder.addStroke(new GestureDescription.StrokeDescription(p, 10L, 500L));
         GestureDescription gesture = builder.build();
-        boolean isDispatched = dispatchGesture(gesture, null, null);
-
-        Toast.makeText(this, "Was it dispatched? " + isDispatched, Toast.LENGTH_SHORT).show();
+//        boolean isDispatched = dispatchGesture(gesture, null, null);
+//
+//        Toast.makeText(this, "Was it dispatched? " + isDispatched, Toast.LENGTH_SHORT).show();
+        Log.d("click","clicked");
     }
 
 }
